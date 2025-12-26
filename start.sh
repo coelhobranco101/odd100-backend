@@ -1,3 +1,3 @@
-#!/bin/sh
+#!/usr/bin/env bash
 npm install
-node index.js
+npm start
