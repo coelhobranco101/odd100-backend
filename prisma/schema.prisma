@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Game {
+  id           String   @id @default(uuid())
+  league       String
+  homeTeam     String
+  awayTeam     String
+  startTime    DateTime
+  createdAt    DateTime @default(now())
+}
+
+model Slip {
+  id                     String   @id @default(uuid())
+  title                  String
+  type                   SlipType
+  oddTotal               Float
+  stakeSuggested         Float
+  potentialReturn        Float
+  probabilityEstimated  Float
+  house                  BettingHouse
+  status                 SlipStatus
+  createdAt              DateTime @default(now())
+
+  items                  SlipItem[]
+}
+
+model SlipItem {
+  id           String   @id @default(uuid())
+  slipId       String
+  game         String
+  league       String
+  market       String
+  selection    String
+  odd          Float
+  startTime    DateTime
+  betanoLink   String
+  superbetLink String
+
+  slip         Slip     @relation(fields: [slipId], references: [id])
+}
+
+enum SlipType {
+  PRINCIPAL
+  OUSADA
+}
+
+enum SlipStatus {
+  ATIVA
+  ENCERRADA
+}
+
+enum BettingHouse {
+  BETANO
+  SUPERBET
+}
